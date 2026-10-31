@@ -1,0 +1,23 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.env.*
+
+# Datasets and model checkpoints
+datasets/
+*.pt
+*.pth
+*.ckpt
+
+# Training outputs
+code/experiments_logs/
+logs/
+*.log
+
+# Editor files
+.vscode/
+.idea/

@@ -1,0 +1,61 @@
+name: TF-C Original - CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tfc-smoke-test:
+    name: Validate TF-C original on CPU
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyTorch CPU and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r requirements-ci.txt
+      - name: Check original TF-C Python syntax
+        run: python -m compileall -q code/TFC code/config_files
+      - name: Test Time and Frequency encoders and classifier
+        run: python -m pytest -v tests/test_tfc_baseline.py --junitxml=pytest-results.xml
+      - name: Test Render status API
+        run: |
+          python -m pip install -r requirements-render-test.txt
+          python -m pytest -v tests/test_render_api.py
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfc-test-report-${{ github.run_id }}
+          path: pytest-results.xml
+          if-no-files-found: ignore
+
+  source-package:
+    name: Package verified source
+    needs: tfc-smoke-test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Archive original TF-C source (no data or weights)
+        run: |
+          mkdir -p dist
+          git archive --format=zip --output=dist/tfc-source.zip HEAD code/TFC code/config_files
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tfc-source-${{ github.sha }}
+          path: dist/tfc-source.zip
+          if-no-files-found: error
+          retention-days: 7

@@ -1,6 +1,7 @@
 # TF-C MLOps — CI/CD với GitHub Actions và Render
 
 Repository thực hành triển khai **CI/CD cho mô hình TF-C (Time-Frequency Consistency)** trên dữ liệu chuỗi thời gian. Dự án giữ kiến trúc TF-C gốc với hai nhánh **Time Encoder** và **Frequency Encoder**; phần bổ sung phục vụ bài thực hành gồm kiểm thử tự động, API kiểm tra trạng thái và cấu hình triển khai lên Render.
+Deployment: GitHub Actions CI → Render Continuous Deployment.
 
 - **Repository:** [NnTien1802/TFC-MLOps](https://github.com/NnTien1802/TFC-MLOps)
 - **Bài toán thí nghiệm:** Pre-training trên **HAR**, fine-tuning/testing trên **Gesture**.

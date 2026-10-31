@@ -1,0 +1,15 @@
+name: tfc-mlops-hub
+
+services:
+  tfc-api:
+    image: ngoctien1802/tfc-mlops:v1
+    pull_policy: always
+    ports:
+      - "8003:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; assert urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200"]
+      interval: 30s
+      timeout: 5s
+      start_period: 45s
+      retries: 3

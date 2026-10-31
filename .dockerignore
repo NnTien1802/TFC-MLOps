@@ -1,0 +1,16 @@
+.git
+.github
+.pytest_cache
+.vscode
+**/__pycache__/
+**/*.py[cod]
+.env
+.env.*
+datasets/
+code/baselines/
+code/experiments_logs/
+data_processing/
+images/
+tests/
+*.log
+*.zip

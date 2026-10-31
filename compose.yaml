@@ -1,0 +1,17 @@
+name: tfc-mlops
+
+services:
+  tfc-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tfc-mlops:v1
+    ports:
+      - "8002:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; assert urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200"]
+      interval: 30s
+      timeout: 5s
+      start_period: 45s
+      retries: 3
